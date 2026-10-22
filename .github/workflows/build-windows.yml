@@ -1,0 +1,36 @@
+name: Exécutables Windows
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Dépendances
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ".[gui,dev]" pyinstaller
+
+      - name: Tests
+        run: python -m pytest -q
+
+      - name: Construction
+        run: pyinstaller --noconfirm --clean packaging/windows/mpp2mindview.spec
+
+      - name: Vérification de l'exe en ligne de commande
+        run: dist\mpp2mindview.exe tests\fixtures\task-links-project2010-mpp14.mpp -o test.xml
+        shell: cmd
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mpp2mindview-windows
+          path: dist/*.exe

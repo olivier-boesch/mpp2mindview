@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mpp2mindview"
+version = "0.1.0"
+description = "Convertit les fichiers MS Project 2010 (.mpp) en XML MS Project importable par MindView"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "LGPL-2.1-or-later" }
+dependencies = ["olefile>=0.46"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+gui = ["kivy>=2.3"]
+
+[project.scripts]
+mpp2mindview = "mpp2mindview.cli:main"
+mpp2mindview-gui = "mpp2mindview.gui:main"
+
+[tool.setuptools]
+packages = ["mpp2mindview"]
